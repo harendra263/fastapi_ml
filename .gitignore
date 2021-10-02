@@ -1,0 +1,5 @@
+env3.9
+app_backup
+.mypy_cache
+.vscode
+__pycache__
