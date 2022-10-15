@@ -173,15 +173,15 @@ class IndentationErrorTest(unittest.TestCase):
         with tt.AssertPrints("IndentationError"):
             with tt.AssertPrints("zoon()", suppress=False):
                 ip.run_cell(indentationerror_file)
-        
+
         with TemporaryDirectory() as td:
             fname = os.path.join(td, "foo.py")
             with open(fname, "w") as f:
                 f.write(indentationerror_file)
-            
+
             with tt.AssertPrints("IndentationError"):
                 with tt.AssertPrints("zoon()", suppress=False):
-                    ip.magic('run %s' % fname)
+                    ip.magic(f'run {fname}')
 
 se_file_1 = """1
 2
@@ -233,7 +233,7 @@ bar()
                 f.write(se_file_1)
 
             with tt.AssertPrints(["7/", "SyntaxError"]):
-                ip.magic("run " + fname)
+                ip.magic(f"run {fname}")
 
             # Modify the file
             with open(fname, 'w') as f:
@@ -241,7 +241,7 @@ bar()
 
             # The SyntaxError should point to the correct line
             with tt.AssertPrints(["7/", "SyntaxError"]):
-                ip.magic("run " + fname)
+                ip.magic(f"run {fname}")
 
     def test_non_syntaxerror(self):
         # SyntaxTB may be called with an error other than a SyntaxError

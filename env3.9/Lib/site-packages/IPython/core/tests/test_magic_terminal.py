@@ -82,7 +82,7 @@ class PasteTestCase(TestCase):
     def paste(self, txt, flags='-q'):
         """Paste input text, by default in quiet mode"""
         ip.hooks.clipboard_get = lambda : txt
-        ip.magic('paste '+flags)
+        ip.magic(f'paste {flags}')
 
     def setUp(self):
         # Inject fake clipboard hook but save original so we can restore it later

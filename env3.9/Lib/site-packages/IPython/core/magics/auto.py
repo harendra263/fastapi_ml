@@ -104,25 +104,20 @@ class AutoMagics(Magics):
         # all-random (note for auto-testing)
         """
 
-        if parameter_s:
-            arg = int(parameter_s)
-        else:
-            arg = 'toggle'
-
-        if not arg in (0, 1, 2, 'toggle'):
+        arg = int(parameter_s) if parameter_s else 'toggle'
+        if arg not in (0, 1, 2, 'toggle'):
             error('Valid modes: (0->Off, 1->Smart, 2->Full')
             return
 
         if arg in (0, 1, 2):
             self.shell.autocall = arg
-        else: # toggle
-            if self.shell.autocall:
-                self._magic_state.autocall_save = self.shell.autocall
-                self.shell.autocall = 0
-            else:
-                try:
-                    self.shell.autocall = self._magic_state.autocall_save
-                except AttributeError:
-                    self.shell.autocall = self._magic_state.autocall_save = 1
+        elif self.shell.autocall:
+            self._magic_state.autocall_save = self.shell.autocall
+            self.shell.autocall = 0
+        else:
+            try:
+                self.shell.autocall = self._magic_state.autocall_save
+            except AttributeError:
+                self.shell.autocall = self._magic_state.autocall_save = 1
 
         print("Automatic calling is:",['OFF','Smart','Full'][self.shell.autocall])

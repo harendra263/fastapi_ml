@@ -24,7 +24,7 @@ class TestLexers(TestCase):
         tokens.extend(self.bash_lexer.get_tokens(fragment[1:]))
         self.assertEqual(tokens, list(self.lexer.get_tokens(fragment)))
 
-        fragment_2 = '!' + fragment
+        fragment_2 = f'!{fragment}'
         tokens_2 = [
             (Token.Operator, '!!'),
         ] + tokens[1:]
@@ -38,7 +38,7 @@ class TestLexers(TestCase):
         ] + tokens[1:]
         self.assertEqual(tokens_2, list(self.lexer.get_tokens(fragment_2)))
 
-        fragment_2 = 'x = ' + fragment
+        fragment_2 = f'x = {fragment}'
         tokens_2 = [
             (Token.Name, 'x'),
             (Token.Text, ' '),
@@ -47,7 +47,7 @@ class TestLexers(TestCase):
         ] + tokens
         self.assertEqual(tokens_2, list(self.lexer.get_tokens(fragment_2)))
 
-        fragment_2 = 'x, = ' + fragment
+        fragment_2 = f'x, = {fragment}'
         tokens_2 = [
             (Token.Name, 'x'),
             (Token.Punctuation, ','),
@@ -57,7 +57,7 @@ class TestLexers(TestCase):
         ] + tokens
         self.assertEqual(tokens_2, list(self.lexer.get_tokens(fragment_2)))
 
-        fragment_2 = 'x, = %sx ' + fragment[1:]
+        fragment_2 = f'x, = %sx {fragment[1:]}'
         tokens_2 = [
             (Token.Name, 'x'),
             (Token.Punctuation, ','),

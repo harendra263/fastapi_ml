@@ -38,7 +38,7 @@ def sleeper(interval=t_short, *a, **kw):
 
 def crasher(interval=t_short, *a, **kw):
     time.sleep(interval)
-    raise Exception("Dead job with interval %s" % interval)
+    raise Exception(f"Dead job with interval {interval}")
 
 #-----------------------------------------------------------------------------
 # Classes and functions

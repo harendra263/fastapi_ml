@@ -5,14 +5,13 @@ Deprecated since IPython 5.0
 Inputhook management for GUI event loop integration.
 """
 
+
 # Copyright (c) IPython Development Team.
 # Distributed under the terms of the Modified BSD License.
 
 try:
     import ctypes
-except ImportError:
-    ctypes = None
-except SystemError: # IronPython issue, 2/8/2014
+except (ImportError, SystemError):
     ctypes = None
 import os
 import platform
@@ -362,12 +361,12 @@ class WxInputHook(InputHookBase):
         warn("This function is deprecated since IPython 5.0 and will be removed in future versions.",
                 DeprecationWarning, stacklevel=2)
         import wx
-        
+
         wx_version = V(wx.__version__).version
-        
+
         if wx_version < [2, 8]:
-            raise ValueError("requires wxPython >= 2.8, but you have %s" % wx.__version__)
-        
+            raise ValueError(f"requires wxPython >= 2.8, but you have {wx.__version__}")
+
         from IPython.lib.inputhookwx import inputhook_wx
         self.manager.set_inputhook(inputhook_wx)
         if _use_appnope():
@@ -552,8 +551,8 @@ class GlutInputHook(InputHookBase):
 
         import OpenGL.GLUT as glut
         from IPython.lib.inputhookglut import glut_display_mode, \
-                                              glut_close, glut_display, \
-                                              glut_idle, inputhook_glut
+                                                  glut_close, glut_display, \
+                                                  glut_idle, inputhook_glut
 
         if GUI_GLUT not in self.manager.apps:
             glut.glutInit( sys.argv )
@@ -565,13 +564,9 @@ class GlutInputHook(InputHookBase):
             glut.glutCreateWindow( sys.argv[0] )
             glut.glutReshapeWindow( 1, 1 )
             glut.glutHideWindow( )
-            glut.glutWMCloseFunc( glut_close )
-            glut.glutDisplayFunc( glut_display )
-            glut.glutIdleFunc( glut_idle )
-        else:
-            glut.glutWMCloseFunc( glut_close )
-            glut.glutDisplayFunc( glut_display )
-            glut.glutIdleFunc( glut_idle)
+        glut.glutWMCloseFunc( glut_close )
+        glut.glutDisplayFunc( glut_display )
+        glut.glutIdleFunc( glut_idle )
         self.manager.set_inputhook( inputhook_glut )
 
 

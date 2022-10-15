@@ -64,7 +64,7 @@ def passwd(passphrase=None, algorithm='sha1'):
             raise UsageError('No matching passwords found. Giving up.')
 
     h = hashlib.new(algorithm)
-    salt = ('%0' + str(salt_len) + 'x') % random.getrandbits(4 * salt_len)
+    salt = f'%0{str(salt_len)}x' % random.getrandbits(4 * salt_len)
     h.update(encode(passphrase, 'utf-8') + encode(salt, 'ascii'))
 
     return ':'.join((algorithm, salt, h.hexdigest()))

@@ -177,16 +177,15 @@ class ScriptMagics(Magics):
         """
         argv = arg_split(line, posix = not sys.platform.startswith('win'))
         args, cmd = self.shebang.parser.parse_known_args(argv)
-        
+
         try:
             p = Popen(cmd, stdout=PIPE, stderr=PIPE, stdin=PIPE)
         except OSError as e:
-            if e.errno == errno.ENOENT:
-                print("Couldn't find program: %r" % cmd[0])
-                return
-            else:
+            if e.errno != errno.ENOENT:
                 raise
-        
+
+            print("Couldn't find program: %r" % cmd[0])
+            return
         if not cell.endswith('\n'):
             cell += '\n'
         cell = cell.encode('utf8', 'replace')
@@ -206,7 +205,7 @@ class ScriptMagics(Magics):
             if args.proc:
                 self.shell.user_ns[args.proc] = p
             return
-        
+
         try:
             out, err = p.communicate(cell)
         except KeyboardInterrupt:
@@ -227,7 +226,7 @@ class ScriptMagics(Magics):
                 pass
             except Exception as e:
                 print("Error while terminating subprocess (pid=%i): %s" \
-                    % (p.pid, e))
+                        % (p.pid, e))
             return
         out = py3compat.decode(out)
         err = py3compat.decode(err)
