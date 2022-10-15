@@ -128,9 +128,7 @@ def getoutput(cmd):
     correct order as would be seen if running the command in a terminal).
     """
     out = process_handler(cmd, lambda p: p.communicate()[0], subprocess.STDOUT)
-    if out is None:
-        return ''
-    return py3compat.decode(out)
+    return '' if out is None else py3compat.decode(out)
 
 
 def getoutputerror(cmd):

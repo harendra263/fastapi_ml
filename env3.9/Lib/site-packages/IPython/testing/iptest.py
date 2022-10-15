@@ -157,7 +157,7 @@ class TestSection(object):
     
     def exclude(self, module):
         if not module.startswith('IPython'):
-            module = self.includes[0] + "." + module
+            module = f"{self.includes[0]}.{module}"
         self.excludes.append(module.replace('.', os.sep))
     
     def requires(self, *packages):
@@ -168,7 +168,7 @@ class TestSection(object):
         return self.enabled and all(have[p] for p in self.dependencies)
 
 # Name -> (include, exclude, dependencies_met)
-test_sections = {n:TestSection(n, ['IPython.%s' % n]) for n in test_group_names}
+test_sections = {n: TestSection(n, [f'IPython.{n}']) for n in test_group_names}
 
 
 # Exclusions and dependencies
@@ -233,7 +233,7 @@ def check_exclusions_exist():
     for sec in test_sections:
         for pattern in sec.exclusions:
             fullpath = pjoin(parent, pattern)
-            if not os.path.exists(fullpath) and not glob.glob(fullpath + '.*'):
+            if not os.path.exists(fullpath) and not glob.glob(f'{fullpath}.*'):
                 warn("Excluding nonexistent file: %r" % pattern)
 
 
@@ -266,9 +266,7 @@ class ExclusionPlugin(Plugin):
     def wantFile(self, filename):
         """Return whether the given filename should be scanned for tests.
         """
-        if any(pat in filename for pat in self.exclude_patterns):
-            return False
-        return None
+        return False if any(pat in filename for pat in self.exclude_patterns) else None
 
     def wantDirectory(self, directory):
         """Return whether the given directory should be scanned for tests.

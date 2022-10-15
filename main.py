@@ -28,9 +28,7 @@ def analyze_article(articles: List[Article]):
     ents = []
     comments = []
     for article in articles:
-        for comment in article.comments:
-            comments.append(comment.upper())
+        comments.extend(comment.upper() for comment in article.comments)
         doc = nlp(article.content)
-        for ent in doc.ents:
-            ents.append({"text":ent.text, "label": ent.label_})
+        ents.extend({"text":ent.text, "label": ent.label_} for ent in doc.ents)
     return {"ents":ents, "comments":comments}

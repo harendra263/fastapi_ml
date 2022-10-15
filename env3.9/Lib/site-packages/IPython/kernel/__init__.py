@@ -1,6 +1,7 @@
 """
 Shim to maintain backwards compatibility with old IPython.kernel imports.
 """
+
 # Copyright (c) IPython Development Team.
 # Distributed under the terms of the Modified BSD License.
 
@@ -20,12 +21,12 @@ sys.modules['IPython.kernel.zmq'] = ShimModule(
     src='IPython.kernel.zmq', mirror='ipykernel')
 
 for pkg in ('comm', 'inprocess'):
-    src = 'IPython.kernel.%s' % pkg
-    sys.modules[src] = ShimModule(src=src, mirror='ipykernel.%s' % pkg)
+    src = f'IPython.kernel.{pkg}'
+    sys.modules[src] = ShimModule(src=src, mirror=f'ipykernel.{pkg}')
 
 for pkg in ('ioloop', 'blocking'):
-    src = 'IPython.kernel.%s' % pkg
-    sys.modules[src] = ShimModule(src=src, mirror='jupyter_client.%s' % pkg)
+    src = f'IPython.kernel.{pkg}'
+    sys.modules[src] = ShimModule(src=src, mirror=f'jupyter_client.{pkg}')
 
 # required for `from IPython.kernel import PKG`
 from ipykernel import comm, inprocess
